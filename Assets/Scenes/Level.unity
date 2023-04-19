@@ -450,7 +450,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5582d5e1b6cd64192efbb63bca2ecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forwardSpeed: 5
+  forwardSpeed: 0
+  laneDistance: 4
 --- !u!136 &1971726622
 CapsuleCollider:
   m_ObjectHideFlags: 0
