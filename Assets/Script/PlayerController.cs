@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
     private Vector3 direction;
     [SerializeField] private float forwardSpeed;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float gravityForce = -20;
     private int desiredLane = 1;
     public float laneDistance = 2.5f; //distance between two lanes
     // Start is called before the first frame update
@@ -19,6 +21,22 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         direction.z = forwardSpeed;
+
+        
+
+        if (controller.isGrounded)
+        {
+            direction.y = -1;
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Jump();
+            }
+
+        }
+        else
+        {
+            direction.y += gravityForce * Time.deltaTime;
+        }
 
         //gather the inputs on which lane we should be
         if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -54,5 +72,10 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         controller.Move(direction * Time.fixedDeltaTime);
+    }
+
+    private void Jump()
+    {
+        direction.y = jumpForce;
     }
 }
