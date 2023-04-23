@@ -44,9 +44,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: iron_barrier
       objectReference: {fileID: 0}
+    - target: {fileID: 117120, guid: 1afece281bd761d4a9b16adee2b788e3, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
+      objectReference: {fileID: 0}
     - target: {fileID: 414714, guid: 1afece281bd761d4a9b16adee2b788e3, type: 3}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 414714, guid: 1afece281bd761d4a9b16adee2b788e3, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.7498
       objectReference: {fileID: 0}
     - target: {fileID: 414714, guid: 1afece281bd761d4a9b16adee2b788e3, type: 3}
       propertyPath: m_LocalPosition.x

@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+
     }
 
     // Update is called once per frame
@@ -27,7 +28,7 @@ public class PlayerController : MonoBehaviour
         if (controller.isGrounded)
         {
             direction.y = -1;
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (SwipeController.swipeUp)
             {
                 Jump();
             }
@@ -39,14 +40,14 @@ public class PlayerController : MonoBehaviour
         }
 
         //gather the inputs on which lane we should be
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (SwipeController.swipeRight)
         {
             desiredLane++;
             if (desiredLane == 3)
                 desiredLane = 2;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (SwipeController.swipeLeft)
         {
             desiredLane--;
             if (desiredLane == -1)
@@ -66,7 +67,17 @@ public class PlayerController : MonoBehaviour
             targetPosition += Vector3.right * laneDistance;
         }
 
-        transform.position = Vector3.Lerp(transform.position, targetPosition, 80 * Time.fixedDeltaTime);
+        //transform.position = Vector3.Lerp(transform.position, targetPosition, 70 * Time.fixedDeltaTime);
+        if (transform.position == targetPosition)
+            return;
+        Vector3 diff = targetPosition - transform.position;
+        Vector3 moveDir = diff.normalized * 25 * Time.deltaTime;
+        if (moveDir.sqrMagnitude < diff.sqrMagnitude)
+            controller.Move(moveDir);
+        else
+            controller.Move(diff);
+        
+
     }
 
     private void FixedUpdate()
@@ -77,5 +88,13 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         direction.y = jumpForce;
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.transform.tag == "Obstacle")
+        {
+            PlayerManager.gameOver = true;
+        }
     }
 }
