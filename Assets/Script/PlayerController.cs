@@ -6,47 +6,65 @@ public class PlayerController : MonoBehaviour
 {
     private CharacterController controller;
     private Vector3 direction;
-    [SerializeField] private float forwardSpeed;
-    [SerializeField] private float jumpForce;
-    [SerializeField] private float gravityForce = -20;
-    private int desiredLane = 1;
-    public float laneDistance = 2.5f; //distance between two lanes
+    public float forwardSpeed;
+    public float maxSpeed;
+
+    private int desiredLane = 1;//0:left, 1:middle, 2:right
+    public float laneDistance = 2.5f;//The distance between tow lanes
+
+    public bool isGrounded;
+    public LayerMask groundLayer;
+    public Transform groundCheck;
+
+    public float gravityForce = -12f;
+    public float jumpForce = 2;
+    public float groundRadius;
+    private Vector3 velocity;
+
+    public Animator animator;
+
+
+
+    bool toggle = false;
     // Start is called before the first frame update
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        Time.timeScale = 1.2f;
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!PlayerManager.isGameStarted || PlayerManager.gameOver)
+            return;
+
+
+
+        animator.SetBool("isGameStarted", true);
         direction.z = forwardSpeed;
 
-        
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundRadius, groundLayer);
 
-        if (controller.isGrounded)
+        animator.SetBool("isGrounded", isGrounded);
+
+        if (isGrounded)
         {
-            direction.y = -1;
             if (SwipeController.swipeUp)
-            {
                 Jump();
-            }
 
         }
-        else
-        {
-            direction.y += gravityForce * Time.deltaTime;
-        }
 
-        //gather the inputs on which lane we should be
+        controller.Move(velocity * Time.deltaTime);
+
+        //Gather the inputs on which lane we should be
         if (SwipeController.swipeRight)
         {
             desiredLane++;
             if (desiredLane == 3)
                 desiredLane = 2;
         }
-
         if (SwipeController.swipeLeft)
         {
             desiredLane--;
@@ -54,40 +72,52 @@ public class PlayerController : MonoBehaviour
                 desiredLane = 0;
         }
 
-        //calculate where we should be in the future
-
+        //Calculate where we should be in the future
         Vector3 targetPosition = transform.position.z * transform.forward + transform.position.y * transform.up;
-
         if (desiredLane == 0)
-        {
             targetPosition += Vector3.left * laneDistance;
-        }
-        else if (desiredLane ==2)
-        {
+        else if (desiredLane == 2)
             targetPosition += Vector3.right * laneDistance;
+
+        //transform.position = targetPosition;
+        if (transform.position != targetPosition)
+        {
+            Vector3 diff = targetPosition - transform.position;
+            Vector3 moveDir = diff.normalized * 30 * Time.deltaTime;
+            if (moveDir.sqrMagnitude < diff.magnitude)
+                controller.Move(moveDir);
+            else
+                controller.Move(diff);
         }
 
-        //transform.position = Vector3.Lerp(transform.position, targetPosition, 70 * Time.fixedDeltaTime);
-        if (transform.position == targetPosition)
-            return;
-        Vector3 diff = targetPosition - transform.position;
-        Vector3 moveDir = diff.normalized * 25 * Time.deltaTime;
-        if (moveDir.sqrMagnitude < diff.sqrMagnitude)
-            controller.Move(moveDir);
-        else
-            controller.Move(diff);
-        
-
+        controller.Move(direction * Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-        controller.Move(direction * Time.fixedDeltaTime);
+        if (!PlayerManager.isGameStarted || PlayerManager.gameOver)
+            return;
+
+        //Increase Speed
+        if (toggle)
+        {
+            toggle = false;
+            if (forwardSpeed < maxSpeed)
+                forwardSpeed += 0.1f * Time.fixedDeltaTime;
+        }
+        else
+        {
+            toggle = true;
+            if (Time.timeScale < 2f)
+                Time.timeScale += 0.005f * Time.fixedDeltaTime;
+        }
     }
 
     private void Jump()
     {
-        direction.y = jumpForce;
+        animator.SetTrigger("jump");
+        controller.center = Vector3.zero;
+        controller.height = 2;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
