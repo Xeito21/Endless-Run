@@ -2495,9 +2495,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentCharacterIndex: 0
   characterModels:
-  - {fileID: 1971726619}
-  - {fileID: 623383055}
-  - {fileID: 113947795}
+  - {fileID: 764583297}
+  - {fileID: 585623300}
+  - {fileID: 541667739}
   inGameplayScene: 1
 --- !u!1001 &8137405812227019588
 PrefabInstance:
