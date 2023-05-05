@@ -1667,9 +1667,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentCharacterIndex: 0
   characterModels:
-  - {fileID: 1507989375}
-  - {fileID: 188566215}
-  - {fileID: 1847252251}
+  - {fileID: 298262652}
+  - {fileID: 1558135863}
+  - {fileID: 1520116651}
   inGameplayScene: 0
 --- !u!1 &1794655625
 GameObject:

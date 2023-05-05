@@ -21,8 +21,6 @@ public class PlayerController : MonoBehaviour
     public float groundRadius;
     private Vector3 velocity;
 
-    public Animator animator;
-
 
 
     bool toggle = false;
@@ -38,21 +36,18 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (!PlayerManager.isGameStarted || PlayerManager.gameOver)
+
             return;
-
-
-
-        animator.SetBool("isGameStarted", true);
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundRadius, groundLayer);
         direction.z = forwardSpeed;
 
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundRadius, groundLayer);
-
-        animator.SetBool("isGrounded", isGrounded);
-
-        if (isGrounded)
+                if (isGrounded)
         {
             if (SwipeController.swipeUp)
+            {
                 Jump();
+                Debug.Log("Jumping!");
+            }
 
         }
 
@@ -90,13 +85,14 @@ public class PlayerController : MonoBehaviour
                 controller.Move(diff);
         }
 
+
         controller.Move(direction * Time.deltaTime);
+        velocity.y += gravityForce * Time.deltaTime;
+
     }
 
     private void FixedUpdate()
     {
-        if (!PlayerManager.isGameStarted || PlayerManager.gameOver)
-            return;
 
         //Increase Speed
         if (toggle)
@@ -115,9 +111,9 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        animator.SetTrigger("jump");
         controller.center = Vector3.zero;
         controller.height = 2;
+        velocity.y = jumpForce;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
