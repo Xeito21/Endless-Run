@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
 
                 if (isGrounded)
         {
-            if (SwipeController.swipeUp)
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 Jump();
                 Debug.Log("Jumping!");
@@ -54,13 +54,13 @@ public class PlayerController : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
 
         //Gather the inputs on which lane we should be
-        if (SwipeController.swipeRight)
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             desiredLane++;
             if (desiredLane == 3)
                 desiredLane = 2;
         }
-        if (SwipeController.swipeLeft)
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             desiredLane--;
             if (desiredLane == -1)

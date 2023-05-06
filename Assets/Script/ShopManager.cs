@@ -43,6 +43,6 @@ public class ShopManager : MonoBehaviour
     public void Selected()
     {
         PlayerPrefs.SetInt("SelectedCharacter", currentCharacterIndex);
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(0);
     }
 }

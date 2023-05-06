@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,11 +20,17 @@ public class Coin : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if (other.tag == "Player")
         {
             FindObjectOfType<AudioManager>().PlaySound("CoinPickUp");
             PlayerManager.numberOfCoins += 1;
+            if (PlayerManager.numberOfCoins > PlayerManager.highNumberCoins)
+            {
+                PlayerManager.highNumberCoins = PlayerManager.numberOfCoins;
+                PlayerPrefs.SetInt("highscore", PlayerManager.highNumberCoins);
+            }
             Destroy(gameObject);
         }
     }
+
 }
