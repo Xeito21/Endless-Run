@@ -6,8 +6,14 @@ public class CameraController : MonoBehaviour
 {
     public Transform target;
     private Vector3 offset;
-    void Start()
+    public Transform[] player;
+    public TileManager tilemanagerSkrip;
+    void Awake()
     {
+        target = player[PlayerPrefs.GetInt("SelectedCharacter")];
+        tilemanagerSkrip.playerTransform = target;
+
+        
         offset = transform.position - target.position;
     }
 
