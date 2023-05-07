@@ -21,6 +21,9 @@ public class PlayerController : MonoBehaviour
     public float groundRadius;
     private Vector3 velocity;
 
+    public Animator animator;
+
+
 
 
     bool toggle = false;
@@ -40,15 +43,24 @@ public class PlayerController : MonoBehaviour
             return;
         isGrounded = Physics.CheckSphere(groundCheck.position, groundRadius, groundLayer);
         direction.z = forwardSpeed;
-
-                if (isGrounded)
+        animator.SetBool("isGameStarted", true);
+        if (isGrounded)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 Jump();
                 Debug.Log("Jumping!");
             }
-
+            else
+            {
+                // Set y-position of character to 0 if it is on the center lane (lane 1)
+                if (desiredLane == 1)
+                {
+                    Vector3 position = transform.position;
+                    position.y = 0f;
+                    transform.position = position;
+                }
+            }
         }
 
         controller.Move(velocity * Time.deltaTime);
