@@ -27,6 +27,7 @@ public class Coin : MonoBehaviour
             if (PlayerManager.numberOfCoins > PlayerManager.highNumberCoins)
             {
                 PlayerManager.highNumberCoins = PlayerManager.numberOfCoins;
+                PlayerPrefs.SetInt("NumberOfCoins", PlayerManager.numberOfCoins);
                 PlayerPrefs.SetInt("highscore", PlayerManager.highNumberCoins);
             }
             Destroy(gameObject);

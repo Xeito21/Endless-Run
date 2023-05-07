@@ -18,25 +18,34 @@ public class PlayerManager : MonoBehaviour
     public TMP_Text coinsText;
     public TMP_Text highcoinsText;
 
-    
     // Start is called before the first frame update
     public void Start()
     {
         gameOver = false;
         Time.timeScale = 1;
         isGameStarted = false;
-        numberOfCoins = 0;
-        highcoinsText.text = "Highscore : " + highNumberCoins.ToString();
+
+        highNumberCoins = PlayerPrefs.GetInt("HighScore", 0);
+        highcoinsText.text = "Highscore : " + numberOfCoins.ToString();
+        numberOfCoins = PlayerPrefs.GetInt("NumberOfCoins", 0);
+        coinsText.text = "Coins: " + numberOfCoins.ToString();
     }
 
-    // Update is called once per frame
     public void Update()
     {
         if (gameOver)
         {
             Time.timeScale = 0;
             gameOverPanel.SetActive(true);
+
+            if (numberOfCoins > highNumberCoins)
+            {
+                highNumberCoins = numberOfCoins;
+                PlayerPrefs.SetInt("HighScore", highNumberCoins);
+                highcoinsText.text = "Highscore : " + highNumberCoins.ToString();
+            }
         }
+
         coinsText.text = "Coins:" + numberOfCoins;
         if (SwipeController.tap)
         {
@@ -45,3 +54,4 @@ public class PlayerManager : MonoBehaviour
         }
     }
 }
+
